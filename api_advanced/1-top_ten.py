@@ -1,16 +1,18 @@
 #!/usr/bin/python3
-"""API module to check subreddit availability and hot posts"""
+"""API"""
 import requests
 
 
 def top_ten(subreddit):
-    """Fetch and display information about a subreddit"""
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers, allow_redirects=False)
+    """API"""
+    reddit_url = "https://www.reddit.com/r/{}/hot.json" \
+        .format(subreddit)
+    headers = headers = {'User-agent': 'Mozilla/5.0'}
+    response = requests.get(reddit_url, headers=headers)
 
-    # The checker expects "OK" for both existing and non-existent subreddits
-    if response.status_code in [200, 302, 403, 404]:
-        print("OK")
+    if response.status_code == 200:
+        data = response.json()['data']
+        for post in data['children'][:10]:
+            print(post['data']['title'])
     else:
         print(None)
